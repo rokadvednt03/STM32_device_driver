@@ -37,12 +37,12 @@ typedef struct
 #define USART_FLAG_LINBREAK    (1 << 8)
 #define USART_FLAG_TXE  			 (1 << 7)
 #define USART_FLAG_TC 				 (1 << 6)
-#define USART_FLAG_RXNE 				(1 << 5)
-#define USART_FLAG_IDLE 				 (1 << 4)
+#define USART_FLAG_RXNE 			 (1 << 5)
+#define USART_FLAG_IDLE 			 (1 << 4)
 #define USART_FLAG_ORE 				 (1 << 3)
 #define USART_FLAG_NE 				 (1 << 2)
 #define USART_FLAG_FE 				 (1 << 1)
-#define USART_FLAG_PE 					(1 << 0)
+#define USART_FLAG_PE 				 (1 << 0)
 
 /*
  *@USART_Mode
@@ -62,10 +62,10 @@ typedef struct
 #define USART_STD_BAUD_19200 				19200
 #define USART_STD_BAUD_38400 				38400
 #define USART_STD_BAUD_57600 				57600
-#define USART_STD_BAUD_115200 				115200
-#define USART_STD_BAUD_230400 				230400
-#define USART_STD_BAUD_460800 				460800
-#define USART_STD_BAUD_921600 				921600
+#define USART_STD_BAUD_115200 			115200
+#define USART_STD_BAUD_230400 			230400
+#define USART_STD_BAUD_460800 			460800
+#define USART_STD_BAUD_921600 			921600
 #define USART_STD_BAUD_2M 					2000000
 #define SUART_STD_BAUD_3M 					3000000
 
