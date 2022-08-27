@@ -9,15 +9,15 @@ void USART_PeriClockControl(USART_TypeDef *pUSARTx, uint8_t EnorDi)
 	{
 		if(pUSARTx == USART1)
 		{
-			RCC->APB1ENR |= (1<<14);
+			RCC->APB2ENR |= (1<<14);
 		}
 		else if(pUSARTx == USART2)
 		{
-			RCC->APB2ENR |= (1<<17);
+			RCC->APB1ENR |= (1<<17);
 		}
 		else if(pUSARTx == USART3)
 		{
-			RCC->APB2ENR |= (1<<18);
+			RCC->APB1ENR |= (1<<18);
 		}
 	}
 	else
