@@ -115,3 +115,15 @@ void USART_Init(USART_Handle_t *pUSARTHandle)
 	
 	
 }
+
+uint8_t USART_GETFlagStatus(uint16_t flagname , USART_TypeDef *pUSARTx)
+{
+	if(pUSARTx->SR & flagname)
+	{
+		return FLAG_SET;
+	}
+	else
+	{
+		return FLAG_RESET;
+	}
+}
