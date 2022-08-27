@@ -116,6 +116,29 @@ void USART_Init(USART_Handle_t *pUSARTHandle)
 	
 }
 
+void USART_SendData(USART_Handle_t *pUSARTHandle,uint8_t *pTxBuffer, uint32_t Len)
+{
+	uint16_t *pdata;
+	if(pUSARTHandle->USART_Config.USART_WordLength == USART_WORDLEN_9BITS)
+	{
+		pdata = (uint16_t*)pTxBuffer;
+		pUSARTHandle->pUSARTx->DR = (*pdata & (uint16_t)0x01FF);
+		if(pUSARTHandle->USART_Config.USART_ParityControl == USART_PARITY_DISABLE)
+		{
+			pTxBuffer++;
+			pTxBuffer++;
+		}
+		else{
+			pTxBuffer++;
+		}
+	}
+	else
+	{
+		pUSARTHandle->pUSARTx->DR = (*pTxBuffer & (uint8_t)0xFF);
+		pTxBuffer++;
+	}
+}
+
 uint8_t USART_GETFlagStatus(uint16_t flagname , USART_TypeDef *pUSARTx)
 {
 	if(pUSARTx->SR & flagname)
