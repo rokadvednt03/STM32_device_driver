@@ -150,3 +150,70 @@ uint8_t USART_GETFlagStatus(uint16_t flagname , USART_TypeDef *pUSARTx)
 		return FLAG_RESET;
 	}
 }
+
+uint32_t GetRCC_PCLK1(void)
+{
+	uint32_t RCC_PCLK1;
+	uint32_t sysclk ;
+	uint32_t temp;
+	sysclk = 8000000;
+	uint32_t ahb,apb1,apb2;
+	uint32_t AHB_PreScaler[8] = {2,4,8,16,64,128,256,512};
+	uint32_t APB1_PreScaler[4] = {2,4,8,16};
+	
+	temp = (RCC->CFGR >> 4 ) & (0xF);
+	if(temp < 8 )
+	{
+		ahb = 1;
+	}
+	else
+	{
+		ahb = AHB_PreScaler[temp-8];
+	}
+	
+	temp = ((RCC->CFGR) >> 8 ) & (0x07);
+	if(temp < 4 )
+	{
+		apb1 = 1;
+	}
+	else
+	{
+		apb1 = APB1_PreScaler[temp-4];
+	}
+	RCC_PCLK1 = (sysclk/ahb)/apb1;
+	return RCC_PCLK1;
+}
+
+
+uint32_t GetRCC_PCLK2(void)
+{
+	uint32_t RCC_PCLK2;
+	uint32_t sysclk ;
+	uint32_t temp;
+	sysclk = 8000000;
+	uint32_t ahb,apb2;
+	uint32_t AHB_PreScaler[8] = {2,4,8,16,64,128,256,512};
+	uint32_t APB2_PreScaler[4] = {2,4,8,16};
+	
+	temp = (RCC->CFGR >> 4 ) & (0xF);
+	if(temp < 8 )
+	{
+		ahb = 1;
+	}
+	else
+	{
+		ahb = AHB_PreScaler[temp-8];
+	}
+	
+	temp = ((RCC->CFGR) >> 11 ) & (0x07);
+	if(temp < 4 )
+	{
+		apb2 = 1;
+	}
+	else
+	{
+		apb2 = APB2_PreScaler[temp-4];
+	}
+	RCC_PCLK2 = (sysclk/ahb)/apb2;
+	return RCC_PCLK2;
+}

@@ -137,7 +137,8 @@ void USART_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority);
 void USART_IRQHandling(USART_Handle_t *pHandle);
 
 
-
+uint32_t GetRCC_PCLK1(void);
+uint32_t GetRCC_PCLK2(void);
 /*
  * Other Peripheral Control APIs
  */
