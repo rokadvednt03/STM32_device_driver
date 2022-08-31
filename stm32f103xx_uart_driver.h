@@ -143,7 +143,6 @@ uint32_t GetRCC_PCLK2(void);
  * Other Peripheral Control APIs
  */
 void USART_PeripheralControl(USART_TypeDef *pUSARTx, uint8_t EnOrDi);
-uint8_t USART_GetFlagStatus(USART_TypeDef *pUSARTx , uint32_t FlagName);
 void USART_ClearFlag(USART_TypeDef *pUSARTx, uint16_t StatusFlagName);
 uint8_t USART_GETFlagStatus(uint16_t flagname , USART_TypeDef *pUSARTx);
 /*

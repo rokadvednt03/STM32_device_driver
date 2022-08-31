@@ -60,6 +60,7 @@ void USART_Init(USART_Handle_t *pUSARTHandle)
 		
 	
 	// USART_Baud;
+	USART_BaudRate(pUSARTHandle->pUSARTx , pUSARTHandle->USART_Config.USART_Baud);
 	
 	// USART_NoOfStopBits;
 	pUSARTHandle->pUSARTx->CR2 |= (pUSARTHandle->USART_Config.USART_NoOfStopBits << 12);
@@ -118,6 +119,7 @@ void USART_Init(USART_Handle_t *pUSARTHandle)
 
 void USART_SendData(USART_Handle_t *pUSARTHandle,uint8_t *pTxBuffer, uint32_t Len)
 {
+	while(! USART_GETFlagStatus(USART_FLAG_TXE,pUSARTHandle->pUSARTx));
 	uint16_t *pdata;
 	if(pUSARTHandle->USART_Config.USART_WordLength == USART_WORDLEN_9BITS)
 	{
@@ -137,6 +139,7 @@ void USART_SendData(USART_Handle_t *pUSARTHandle,uint8_t *pTxBuffer, uint32_t Le
 		pUSARTHandle->pUSARTx->DR = (*pTxBuffer & (uint8_t)0xFF);
 		pTxBuffer++;
 	}
+	while(! USART_GETFlagStatus(USART_FLAG_TC , pUSARTHandle->pUSARTx));
 }
 
 uint8_t USART_GETFlagStatus(uint16_t flagname , USART_TypeDef *pUSARTx)
@@ -217,3 +220,32 @@ uint32_t GetRCC_PCLK2(void)
 	RCC_PCLK2 = (sysclk/ahb)/apb2;
 	return RCC_PCLK2;
 }
+
+
+void USART_BaudRate(USART_TypeDef *pUSARTx , uint32_t baudrate)
+{
+		uint32_t pCLKx;
+	uint8_t M_Part , F_Part;
+	//	USART1 = APB2 BUS
+	//	other all USARTx = APB1 BUS
+	if(pUSARTx == USART1)
+	{
+			//USART1 = APB2 BUS
+		pCLKx = GetRCC_PCLK2() ;
+		
+	}
+	else
+	{
+		pCLKx = GetRCC_PCLK2() ;
+	}
+	uint8_t temp;
+	temp = (pCLKx *100)/(16*baudrate);
+	M_Part = temp/100 ;
+	F_Part = ((temp - (M_Part*100))*8) + 50 ;
+	
+	pUSARTx->BRR |= (F_Part << 0);
+	pUSARTx->BRR |= (M_Part << 4);
+	
+}
+
+
