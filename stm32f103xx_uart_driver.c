@@ -60,7 +60,7 @@ void USART_Init(USART_Handle_t *pUSARTHandle)
 		
 	
 	// USART_Baud;
-	USART_BaudRate(pUSARTHandle->pUSARTx , pUSARTHandle->USART_Config.USART_Baud);
+	USART_Set_Baudrate(pUSARTHandle->pUSARTx,pUSARTHandle->USART_Config.USART_Baud);
 	
 	// USART_NoOfStopBits;
 	pUSARTHandle->pUSARTx->CR2 |= (pUSARTHandle->USART_Config.USART_NoOfStopBits << 12);
@@ -154,98 +154,26 @@ uint8_t USART_GETFlagStatus(uint16_t flagname , USART_TypeDef *pUSARTx)
 	}
 }
 
-uint32_t GetRCC_PCLK1(void)
+void USART_Set_Baudrate(USART_TypeDef *pUSARTx , uint32_t baudrate)
 {
-	uint32_t RCC_PCLK1;
-	uint32_t sysclk ;
+	uint32_t M_Part , F_Part;
 	uint32_t temp;
-	sysclk = 8000000;
-	uint32_t ahb,apb1,apb2;
-	uint32_t AHB_PreScaler[8] = {2,4,8,16,64,128,256,512};
-	uint32_t APB1_PreScaler[4] = {2,4,8,16};
+	uint32_t pclk1 = 36000000 ;
+	uint32_t pclk2 = 72000000 ;
 	
-	temp = (RCC->CFGR >> 4 ) & (0xF);
-	if(temp < 8 )
-	{
-		ahb = 1;
-	}
-	else
-	{
-		ahb = AHB_PreScaler[temp-8];
-	}
-	
-	temp = ((RCC->CFGR) >> 8 ) & (0x07);
-	if(temp < 4 )
-	{
-		apb1 = 1;
-	}
-	else
-	{
-		apb1 = APB1_PreScaler[temp-4];
-	}
-	RCC_PCLK1 = (sysclk/ahb)/apb1;
-	return RCC_PCLK1;
-}
-
-
-uint32_t GetRCC_PCLK2(void)
-{
-	uint32_t RCC_PCLK2;
-	uint32_t sysclk ;
-	uint32_t temp;
-	sysclk = 8000000;
-	uint32_t ahb,apb2;
-	uint32_t AHB_PreScaler[8] = {2,4,8,16,64,128,256,512};
-	uint32_t APB2_PreScaler[4] = {2,4,8,16};
-	
-	temp = (RCC->CFGR >> 4 ) & (0xF);
-	if(temp < 8 )
-	{
-		ahb = 1;
-	}
-	else
-	{
-		ahb = AHB_PreScaler[temp-8];
-	}
-	
-	temp = ((RCC->CFGR) >> 11 ) & (0x07);
-	if(temp < 4 )
-	{
-		apb2 = 1;
-	}
-	else
-	{
-		apb2 = APB2_PreScaler[temp-4];
-	}
-	RCC_PCLK2 = (sysclk/ahb)/apb2;
-	return RCC_PCLK2;
-}
-
-
-void USART_BaudRate(USART_TypeDef *pUSARTx , uint32_t baudrate)
-{
-		uint32_t pCLKx;
-	uint8_t M_Part , F_Part;
-	//	USART1 = APB2 BUS
-	//	other all USARTx = APB1 BUS
 	if(pUSARTx == USART1)
 	{
-			//USART1 = APB2 BUS
-		pCLKx = GetRCC_PCLK2() ;
-		
+			temp = (pclk2 * 100 / (16 * baudrate) ) ;
 	}
 	else
 	{
-		pCLKx = GetRCC_PCLK2() ;
+		temp = (pclk1 * 100 / (16 * baudrate) ) ;
 	}
-	uint8_t temp;
-	temp = (pCLKx *100)/(16*baudrate);
-	M_Part = temp/100 ;
-	F_Part = ((temp - (M_Part*100))*8) + 50 ;
 	
-	pUSARTx->BRR |= (F_Part << 0);
+	M_Part = temp / 100 ;
+	F_Part = ((temp - (M_Part*100))*16)/100 ;
+	
 	pUSARTx->BRR |= (M_Part << 4);
+	pUSARTx->BRR |= (F_Part << 0);
 	
 }
-
-

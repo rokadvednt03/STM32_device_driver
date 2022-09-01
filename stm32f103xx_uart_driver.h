@@ -57,7 +57,7 @@ typedef struct
  *Possible options for USART_Baud
  */
 #define USART_STD_BAUD_1200					1200
-#define USART_STD_BAUD_2400					400
+#define USART_STD_BAUD_2400					2400
 #define USART_STD_BAUD_9600					9600
 #define USART_STD_BAUD_19200 				19200
 #define USART_STD_BAUD_38400 				38400
@@ -68,6 +68,7 @@ typedef struct
 #define USART_STD_BAUD_921600 			921600
 #define USART_STD_BAUD_2M 					2000000
 #define SUART_STD_BAUD_3M 					3000000
+
 
 
 /*
@@ -139,6 +140,7 @@ void USART_IRQHandling(USART_Handle_t *pHandle);
 
 uint32_t GetRCC_PCLK1(void);
 uint32_t GetRCC_PCLK2(void);
+void USART_Set_Baudrate(USART_TypeDef *pUSARTx , uint32_t baudrate);
 /*
  * Other Peripheral Control APIs
  */
