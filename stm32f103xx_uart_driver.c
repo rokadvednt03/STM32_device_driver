@@ -119,6 +119,8 @@ void USART_Init(USART_Handle_t *pUSARTHandle)
 
 void USART_SendData(USART_Handle_t *pUSARTHandle,uint8_t *pTxBuffer, uint32_t Len)
 {
+	while(Len--)
+	{
 	while(! USART_GETFlagStatus(USART_FLAG_TXE,pUSARTHandle->pUSARTx));
 	uint16_t *pdata;
 	if(pUSARTHandle->USART_Config.USART_WordLength == USART_WORDLEN_9BITS)
@@ -140,6 +142,8 @@ void USART_SendData(USART_Handle_t *pUSARTHandle,uint8_t *pTxBuffer, uint32_t Le
 		pTxBuffer++;
 	}
 	while(! USART_GETFlagStatus(USART_FLAG_TC , pUSARTHandle->pUSARTx));
+
+	}
 }
 
 uint8_t USART_GETFlagStatus(uint16_t flagname , USART_TypeDef *pUSARTx)
@@ -156,18 +160,18 @@ uint8_t USART_GETFlagStatus(uint16_t flagname , USART_TypeDef *pUSARTx)
 
 void USART_Set_Baudrate(USART_TypeDef *pUSARTx , uint32_t baudrate)
 {
-	uint32_t M_Part , F_Part;
+	uint32_t M_Part  , F_Part ;
 	uint32_t temp;
 	uint32_t pclk1 = 36000000 ;
 	uint32_t pclk2 = 72000000 ;
 	
 	if(pUSARTx == USART1)
 	{
-			temp = (pclk2 * 100 / (16 * baudrate) ) ;
+			temp = ((pclk2 * 25) / (4 * 9600) ) ;
 	}
 	else
 	{
-		temp = (pclk1 * 100 / (16 * baudrate) ) ;
+		temp = ((pclk1 * 25 ) / (4 * baudrate) ) ;
 	}
 	
 	M_Part = temp / 100 ;
@@ -176,4 +180,16 @@ void USART_Set_Baudrate(USART_TypeDef *pUSARTx , uint32_t baudrate)
 	pUSARTx->BRR |= (M_Part << 4);
 	pUSARTx->BRR |= (F_Part << 0);
 	
+}
+
+void USART_Enable(USART_TypeDef *pUSARTx , uint8_t EnorDi)
+{
+		if(EnorDi == ENABLE)
+		{
+				pUSARTx->CR1 |= (1 << 13 );
+		}
+		else
+		{
+				pUSARTx->CR1 &= ~(1 << 13 );
+		}
 }

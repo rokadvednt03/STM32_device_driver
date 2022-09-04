@@ -151,3 +151,6 @@ uint8_t USART_GETFlagStatus(uint16_t flagname , USART_TypeDef *pUSARTx);
  * Application callback
  */
 void USART_ApplicationEventCallback(USART_Handle_t *pUSARTHandle,uint8_t AppEv);
+
+
+void USART_Enable(USART_TypeDef *pUSARTx , uint8_t EnorDi);

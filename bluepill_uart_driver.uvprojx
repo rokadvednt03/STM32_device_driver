@@ -414,11 +414,6 @@
               <FileType>1</FileType>
               <FilePath>.\stm32f103xx_gpio_driver.c</FilePath>
             </File>
-            <File>
-              <FileName>stm32f103xx_clock_select.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\stm32f103xx_clock_select.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
