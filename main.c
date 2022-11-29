@@ -1,6 +1,8 @@
 #include "stm32f1030xx_gpio_driver.h"
 #include "stm32f103xx_uart_driver.h"
 #include <string.h>
+#include <stdio.h>
+#include <stdint.h>
 //void USART_GPIO(void);
 //void USART_SETTING(void);
 int main()
@@ -31,14 +33,20 @@ int main()
 	USART_PeriClockControl(USART1 , ENABLE);
 	USART_Init(&trans);
 
+
+	uint8_t data = 2;
+	//int delay;
 	
-	char data [] = "When properly configured, UART can work with many different types of serial protocols that involve transmitting and receiving serial data. In serial communication, data is transferred bit by bit using a single line or wire. In two-way communication, we use two wires for successful serial data transfer. Depending on the application and system requirements, serial communications needs less circuitry and wires, which reduces the cost of implementation.";
 	
-	USART_Enable(USART1,ENABLE);
+	USART_Enable(USART1,ENABLE);	
+	for( data = 0 ; data < 255 ; data ++ )
+	{
+	//for(delay = 0 ; delay < 500000 ; delay ++);
+	USART_SendData(&trans,&data , sizeof(data));
 	
-	USART_SendData(&trans,(uint8_t*)data , strlen(data));
+}	
 	
-		USART_Enable(USART1,DISABLE);
+	USART_Enable(USART1,DISABLE);
 }
 /*
 void USART_GPIO(void)
