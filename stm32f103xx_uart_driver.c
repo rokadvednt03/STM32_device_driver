@@ -1,3 +1,13 @@
+/**
+  ******************************************************************************
+  * @file    		stm32f103xx_uart_driver.c
+  * @author  		Vedant A. Rokad
+  * @processor 	ARM Cortex-M3
+  * @date    		27-Augest-2022
+  * @brief   		Device_Driver source file
+  ******************************************************************************
+ **/
+ 
 #include "stm32f10x.h"
 #include "stm32f103xx_uart_driver.h"
 #include <stdint.h>
@@ -5,7 +15,7 @@
 
 /****************************************************************************************
 *                                                                                       *
-*                                TIMER_PERIPHERAL_CLOCK                                 *
+*                                USART_PERIPHERAL_CLOCK                                 *
 *                                                                                       *
 /***************************************************************************************/
 void USART_PeriClockControl(USART_TypeDef *pUSARTx, uint8_t EnorDi)
