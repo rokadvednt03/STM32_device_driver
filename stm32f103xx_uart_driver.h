@@ -3,6 +3,7 @@
   * @file    		stm32f103xx_uart_driver.h
   * @author  		Vedant A. Rokad
   * @processor 	ARM Cortex-M3
+	* @controller STM32F103C8T8
   * @date    		27-Augest-2022
   * @brief   		Device_Driver header file
   ******************************************************************************
@@ -22,6 +23,7 @@
 *                                                                                       *
 /***************************************************************************************/
 //@USART_FLAG
+
 #define USART_FLAG_CTS 			   (1 << 9)
 #define USART_FLAG_LINBREAK    (1 << 8)
 #define USART_FLAG_TXE  			 (1 << 7)
@@ -32,6 +34,7 @@
 #define USART_FLAG_NE 				 (1 << 2)
 #define USART_FLAG_FE 				 (1 << 1)
 #define USART_FLAG_PE 				 (1 << 0)
+
 
  //@USART_Mode
  
@@ -108,6 +111,7 @@ typedef struct
 {
 	USART_TypeDef *pUSARTx;
 	USART_Config_t   USART_Config;
+	
 }USART_Handle_t;
 
 
@@ -128,19 +132,16 @@ void USART_SendData(USART_Handle_t *pUSARTHandle,uint8_t *pTxBuffer, uint32_t Le
 void USART_ReceiveData(USART_Handle_t *pUSARTHandle, uint8_t *pRxBuffer, uint32_t Len);
 uint8_t USART_SendDataIT(USART_Handle_t *pUSARTHandle,uint8_t *pTxBuffer, uint32_t Len);
 uint8_t USART_ReceiveDataIT(USART_Handle_t *pUSARTHandle, uint8_t *pRxBuffer, uint32_t Len);
-void USART_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi);
+
+void USART_Interrupt_IRQ_Control(USART_TypeDef *pusart,uint16_t Enordi);
 void USART_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority);
 void USART_IRQHandling(USART_Handle_t *pHandle);
 
 
-uint32_t GetRCC_PCLK1(void);
-uint32_t GetRCC_PCLK2(void);
 void USART_Set_Baudrate(USART_TypeDef *pUSARTx , uint32_t baudrate);
 
 void USART_PeripheralControl(USART_TypeDef *pUSARTx, uint8_t EnOrDi);
 void USART_ClearFlag(USART_TypeDef *pUSARTx, uint16_t StatusFlagName);
 uint8_t USART_GETFlagStatus(uint16_t flagname , USART_TypeDef *pUSARTx);
-
-void USART_ApplicationEventCallback(USART_Handle_t *pUSARTHandle,uint8_t AppEv);
 
 void USART_Enable(USART_TypeDef *pUSARTx , uint8_t EnorDi);

@@ -3,6 +3,7 @@
   * @file    		stm32f103xx_uart_driver.c
   * @author  		Vedant A. Rokad
   * @processor 	ARM Cortex-M3
+	* @controller STM32F103C8T8
   * @date    		27-Augest-2022
   * @brief   		Device_Driver source file
   ******************************************************************************
@@ -20,8 +21,10 @@
 /***************************************************************************************/
 void USART_PeriClockControl(USART_TypeDef *pUSARTx, uint8_t EnorDi)
 {
+		//check whether peripharal is enable or not
 		if(EnorDi == ENABLE)
 			{
+					//enable the usart peripheral 
 					if(pUSARTx == USART1)
 							RCC->APB2ENR |= (1<<14);
 					else if(pUSARTx == USART2)
@@ -31,6 +34,7 @@ void USART_PeriClockControl(USART_TypeDef *pUSARTx, uint8_t EnorDi)
 			}
 		else
 			{
+					//disable the usart peripheral 
 					if(pUSARTx == USART1)
 							RCC->APB1ENR &= ~(1<<14);
 					else if(pUSARTx == USART2)
@@ -50,17 +54,20 @@ void USART_PeriClockControl(USART_TypeDef *pUSARTx, uint8_t EnorDi)
 /***************************************************************************************/
 void USART_Init(USART_Handle_t *pUSARTHandle)
 {
-	// USART_Mode;
+	// select the USART mode
+	// 1.USART_MODE_ONLY_Transmission
 	if(pUSARTHandle->USART_Config.USART_Mode == USART_MODE_ONLY_TX)
 	{
 			pUSARTHandle->pUSARTx->CR1 |= (1<<3);
 			pUSARTHandle->pUSARTx->CR1 &= ~(1<<2);
 	}
+	//2.USART_MODE_ONLY_Receiver
 	else if(pUSARTHandle->USART_Config.USART_Mode == USART_MODE_ONLY_RX)
 	{
 			pUSARTHandle->pUSARTx->CR1 &= ~(1<<3);
 			pUSARTHandle->pUSARTx->CR1 |= (1<<2);
 	}
+	//3.USART_MODE_Transmission_Receiver
 	else if(pUSARTHandle->USART_Config.USART_Mode == USART_MODE_TXRX)
 	{
 			pUSARTHandle->pUSARTx->CR1 |= (1<<3);
@@ -68,10 +75,10 @@ void USART_Init(USART_Handle_t *pUSARTHandle)
 	}
 	
 			
-	// USART_Baud;
+	//Set the baudrate
 	USART_Set_Baudrate(pUSARTHandle->pUSARTx,pUSARTHandle->USART_Config.USART_Baud);
 	
-	// USART_NoOfStopBits;
+	//Configure Number of STOP bit 
 	pUSARTHandle->pUSARTx->CR2 |= (pUSARTHandle->USART_Config.USART_NoOfStopBits << 12);
 
 
@@ -82,16 +89,18 @@ void USART_Init(USART_Handle_t *pUSARTHandle)
 				pUSARTHandle->pUSARTx->CR1 |= (1<<12);
 	
 		
-		// USART_ParityControl;
+	//USART_Parity_Control
 	if(pUSARTHandle->USART_Config.USART_ParityControl == USART_PARITY_DISABLE)
 			pUSARTHandle->pUSARTx->CR1 &= ~(1<<10);
 	else
 	{
+		//USART_EVEN_PARITY
 		if(pUSARTHandle->USART_Config.USART_ParityControl == USART_PARITY_EN_EVEN)
 		{
 				pUSARTHandle->pUSARTx->CR1 |= (1<<10);
 				pUSARTHandle->pUSARTx->CR1 &= ~(1<<9);
 		}
+		//USART_ODD_PARITY
 		else
 		{
 				pUSARTHandle->pUSARTx->CR1 |= (1<<10);
@@ -102,7 +111,7 @@ void USART_Init(USART_Handle_t *pUSARTHandle)
 	
 	
 	
-	// USART_HWFlowControl;
+	//USART_Hardware_Flow_Control
 	if(pUSARTHandle->USART_Config.USART_HWFlowControl == USART_HW_FLOW_CTRL_NONE)
 	{
 		pUSARTHandle->pUSARTx->CR3 &= ~(1<<8);
@@ -183,7 +192,15 @@ uint8_t USART_GETFlagStatus(uint16_t flagname , USART_TypeDef *pUSARTx)
 	}
 }
 
-
+/****************************************************************************************
+*                                                                                       *
+*                                   USART_ClearFlag			                                *
+*                                                                                       *
+/***************************************************************************************/
+void USART_ClearFlag(USART_TypeDef *pUSARTx, uint16_t StatusFlagName)
+{
+	pUSARTx->SR &= ~(StatusFlagName);
+}
 
 
 /****************************************************************************************
@@ -233,4 +250,36 @@ void USART_Enable(USART_TypeDef *pUSARTx , uint8_t EnorDi)
 		{
 				pUSARTx->CR1 &= ~(1 << 13 );
 		}
+}
+
+/****************************************************************************************
+*                                                                                       *
+*                             USART_Interrupt_IRQ_Control		                            *
+*                                                                                       *
+/***************************************************************************************/
+void USART_Interrupt_IRQ_Control(USART_TypeDef *pusart,uint16_t Enordi)
+{
+	if(Enordi == ENABLE)
+	{
+			if(pusart == USART1)
+				NVIC_EnableIRQ(37);
+			else if(pusart == USART1)
+				NVIC_EnableIRQ(38);
+			else if(pusart == USART1)
+				NVIC_EnableIRQ(39);
+	}
+	else
+	{
+			if(pusart == USART1)
+				NVIC_DisableIRQ(37);
+			else if(pusart == USART1)
+				NVIC_DisableIRQ(38);
+			else if(pusart == USART1)
+				NVIC_DisableIRQ(39);
+	}
+}
+
+void USART_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority)
+{
+	NVIC_SetPriority(IRQNumber,IRQPriority);
 }
