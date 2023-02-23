@@ -45,7 +45,7 @@ int main()
 	}	
 	
 	USART_Enable(USART1,DISABLE);
-}
+} 
 
 void USART1_IRQHandler(void)
 {

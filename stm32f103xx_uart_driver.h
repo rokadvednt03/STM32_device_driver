@@ -145,3 +145,4 @@ void USART_ClearFlag(USART_TypeDef *pUSARTx, uint16_t StatusFlagName);
 uint8_t USART_GETFlagStatus(uint16_t flagname , USART_TypeDef *pUSARTx);
 
 void USART_Enable(USART_TypeDef *pUSARTx , uint8_t EnorDi);
+

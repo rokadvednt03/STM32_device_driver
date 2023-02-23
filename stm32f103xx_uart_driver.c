@@ -257,7 +257,7 @@ void USART_Enable(USART_TypeDef *pUSARTx , uint8_t EnorDi)
 *                             USART_Interrupt_IRQ_Control		                            *
 *                                                                                       *
 /***************************************************************************************/
-void USART_Interrupt_IRQ_Control(USART_TypeDef *pusart,uint16_t Enordi)
+void USART_Interrupt_IRQ_Control(USART_TypeDef *pusart,uint16_t Enordi) 
 {
 	if(Enordi == ENABLE)
 	{
