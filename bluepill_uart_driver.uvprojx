@@ -52,7 +52,7 @@
           <OutputName>bluepill_uart_driver</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
@@ -413,6 +413,11 @@
               <FileName>stm32f103xx_gpio_driver.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\stm32f103xx_gpio_driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>fput_debug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\fput_debug.c</FilePath>
             </File>
           </Files>
         </Group>
